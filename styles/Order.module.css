@@ -1,0 +1,138 @@
+.container {
+  min-height: calc(100vh - 100px);
+  padding: 50px;
+  display: flex;
+  gap: 50px;
+}
+
+.left {
+  flex: 2;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.table {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 100px;
+}
+
+.done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes inProgress {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.inProgress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: inProgress 1s ease infinite alternate;
+}
+
+.undone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0.3;
+}
+
+.undone .checkedIcon,
+.inProgress .checkedIcon {
+  display: none;
+}
+
+.right {
+  flex: 1;
+}
+
+.wrapper {
+  width: 100%;
+  max-height: 300px;
+  padding: 10px 50px 30px 50px;
+  border-radius: 10px;
+  background-color: #333;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.totalTextTitle {
+  margin-right: 10px;
+}
+
+.button {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  background-color: white;
+  color: teal;
+  cursor: not-allowed;
+}
+
+@media screen and (max-width: 820px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .trTitle {
+    display: none;
+  }
+
+  .tr {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+  }
+
+  .id::before {
+    content: "Order ID: ";
+    font-weight: 500;
+  }
+  .name::before {
+    content: "Customer: ";
+    font-weight: 500;
+  }
+  .address::before {
+    content: "Address: ";
+    font-weight: 500;
+  }
+  .total::before {
+    content: "Total: ";
+    font-weight: 500;
+  }
+
+  .row:last-child {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .done,
+  .undone,
+  .inProgress {
+    margin-bottom: 30px;
+  }
+
+  .wrapper {
+    width: 100%;
+  }
+}

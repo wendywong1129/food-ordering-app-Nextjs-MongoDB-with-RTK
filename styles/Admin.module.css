@@ -1,0 +1,124 @@
+.logoutContainer {
+  display: flex;
+  justify-content: end;
+}
+
+.logoutButton {
+  display: inline-block;
+  padding: 15px 20px;
+  margin: 30px 50px 0 0;
+  border: none;
+  border-radius: 10px;
+  background-color: crimson;
+  color: white;
+  font-size: medium;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+}
+
+.container {
+  min-height: calc(100vh - 100px);
+  padding: 0 50px 50px 50px;
+  display: flex;
+  flex-direction: column;
+}
+
+.items {
+  display: flex;
+  gap: 30px;
+}
+
+.item {
+  flex: 1;
+}
+
+.table {
+  width: 100%;
+  text-align: left;
+}
+
+.trTitle {
+  height: 60px;
+}
+
+.button {
+  border: none;
+  color: white;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.button:first-child,
+.button:last-child {
+  background-color: #1c9f6e;
+  margin-right: 10px;
+}
+
+.button:nth-child(2) {
+  background-color: crimson;
+}
+
+@media screen and (max-width: 820px) {
+  .container {
+    padding: 0px 50px;
+    margin-bottom: 100px;
+    flex-direction: column;
+    align-items: center;
+    gap: 100px;
+  }
+
+  .table {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+  }
+
+  .tHead {
+    display: none;
+  }
+
+  .trTitle {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .id::before {
+    content: "Id: ";
+    font-weight: 500;
+  }
+
+  .title::before {
+    content: "Title: ";
+    font-weight: 500;
+  }
+
+  .price::before {
+    content: "Price: ";
+    font-weight: 500;
+  }
+
+  .customer::before {
+    content: "Customer: ";
+    font-weight: 500;
+  }
+
+  .total::before {
+    content: "Total: ";
+    font-weight: 500;
+  }
+
+  .method::before {
+    content: "Payment: ";
+    font-weight: 500;
+  }
+
+  .status::before {
+    content: "Status: ";
+    font-weight: 500;
+  }
+}
