@@ -18,6 +18,12 @@ const Product = ({ pizza }) => {
     setPrice(price + number);
   };
 
+  const handleSize = (sizeIndex) => {
+    const difference = pizza.prices[sizeIndex] - pizza.prices[size];
+    setSize(sizeIndex);
+    changePrice(difference);
+  };
+
   const handleChange = (e, option) => {
     const checked = e.target.checked;
 
@@ -29,12 +35,6 @@ const Product = ({ pizza }) => {
       changePrice(-option.price);
       setExtras(extras.filter((extra) => extra._id !== option._id));
     }
-  };
-
-  const handleSize = (sizeIndex) => {
-    const difference = pizza.prices[sizeIndex] - pizza.prices[size];
-    setSize(sizeIndex);
-    changePrice(difference);
   };
 
   const handleClick = () => {
@@ -141,9 +141,10 @@ const Product = ({ pizza }) => {
   );
 };
 
-export const getServerSideProps = async ({ params }) => {
+export const getServerSideProps = async (context) => {
+  const { params } = context;
   const res = await axios.get(
-    `http://localhost:3000/api/products/${params.id}`
+    `${process.env.NEXT_PUBLIC_API_URL}/api/products/${params.id}`
   );
   return {
     props: {

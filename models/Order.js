@@ -5,12 +5,12 @@ const OrderSchema = new mongoose.Schema(
     customer: {
       type: String,
       required: true,
-      maxlength: 60,
+      maxlength: 30,
     },
     address: {
       type: String,
       required: true,
-      maxlength: 200,
+      maxlength: 100,
     },
     total: {
       type: Number,

@@ -20,7 +20,7 @@ const Add = ({ setIsAdd, setPizzaList, pizzaList }) => {
     setExtra({ ...extra, [e.target.name]: e.target.value });
   };
 
-  const handleExtra = (e) => {
+  const handleExtraOptions = (e) => {
     setExtraOptions((prev) => [...prev, extra]);
   };
 
@@ -30,7 +30,7 @@ const Add = ({ setIsAdd, setPizzaList, pizzaList }) => {
     formData.append("upload_preset", "food-order");
     try {
       const uploadRes = await axios.post(
-        "https://api.cloudinary.com/v1_1/dbbeyjd5f/image/upload",
+        `https://api.cloudinary.com/v1_1/${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
         formData
       );
 
@@ -44,7 +44,7 @@ const Add = ({ setIsAdd, setPizzaList, pizzaList }) => {
       };
 
       const newPizza = await axios.post(
-        "http://localhost:3000/api/products",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/products`,
         newProduct
       );
       setIsAdd(false);
@@ -142,7 +142,7 @@ const Add = ({ setIsAdd, setPizzaList, pizzaList }) => {
               />
             </div>
             <div className={styles.extraButton}>
-              <button onClick={handleExtra}>Add</button>
+              <button onClick={handleExtraOptions}>Add</button>
             </div>
           </div>
         </div>

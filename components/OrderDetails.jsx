@@ -12,7 +12,7 @@ const OrderDetails = ({ total, createOrder, setIsPayByCash }) => {
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>
-        <h1 className={styles.title}>You&apos;re going to pay $12</h1>
+        <h1 className={styles.title}>You&apos;re going to pay ${total}</h1>
         <div className={styles.item}>
           <label className={styles.label} htmlFor="name">
             Full Name

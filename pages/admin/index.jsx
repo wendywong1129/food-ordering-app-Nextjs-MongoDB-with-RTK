@@ -2,20 +2,30 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Image from "next/image";
+import Edit from "../../components/Edit";
 import styles from "../../styles/Admin.module.css";
 
 const Index = ({ products, orders }) => {
   const [pizzaList, setPizzaList] = useState(products);
   const [orderList, setOrderList] = useState(orders);
+  const [isEdit, setIsEdit] = useState(false);
+  const [productItem, setProductItem] = useState(null);
+
+  console.log(pizzaList);
 
   const router = useRouter();
 
   const status = ["preparing", "on the way", "delivered"];
 
+  const handleEdit = (product) => {
+    setIsEdit(true);
+    setProductItem(product);
+  };
+
   const handleDelete = async (id) => {
     try {
-      const res = await axios.delete(
-        "http://localhost:3000/api/products/" + id
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/products/` + id
       );
       setPizzaList(pizzaList.filter((pizza) => pizza._id !== id));
     } catch (err) {
@@ -28,9 +38,12 @@ const Index = ({ products, orders }) => {
     const currentStatus = item.status;
 
     try {
-      const res = await axios.put("http://localhost:3000/api/orders/" + id, {
-        status: currentStatus + 1,
-      });
+      const res = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/orders/` + id,
+        {
+          status: currentStatus + 1,
+        }
+      );
       setOrderList([
         res.data,
         ...orderList.filter((order) => order._id !== id),
@@ -42,7 +55,7 @@ const Index = ({ products, orders }) => {
 
   const handleLogout = async () => {
     try {
-      await axios.get("http://localhost:3000/api/logout");
+      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/logout`);
       router.push("/login");
     } catch (err) {
       console.log(err);
@@ -85,7 +98,12 @@ const Index = ({ products, orders }) => {
                   <td className={styles.title}>{product.title}</td>
                   <td className={styles.price}>${product.prices[0]}</td>
                   <td>
-                    <button className={styles.button}>Edit</button>
+                    <button
+                      className={styles.button}
+                      onClick={() => handleEdit(product)}
+                    >
+                      Edit
+                    </button>
                     <button
                       className={styles.button}
                       onClick={() => handleDelete(product._id)}
@@ -135,6 +153,14 @@ const Index = ({ products, orders }) => {
           </table>
         </div>
       </div>
+      {isEdit && (
+        <Edit
+          productItem={productItem}
+          setIsEdit={setIsEdit}
+          setPizzaList={setPizzaList}
+          pizzaList={pizzaList}
+        />
+      )}
     </div>
   );
 };
@@ -151,8 +177,12 @@ export const getServerSideProps = async (context) => {
     };
   }
 
-  const productRes = await axios.get("http://localhost:3000/api/products");
-  const orderRes = await axios.get("http://localhost:3000/api/orders");
+  const productRes = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/products`
+  );
+  const orderRes = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/orders`
+  );
 
   return {
     props: {

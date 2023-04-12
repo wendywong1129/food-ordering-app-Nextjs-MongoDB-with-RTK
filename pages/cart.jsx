@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
 import {
   PayPalScriptProvider,
   PayPalButtons,
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
 import axios from "axios";
-import { reset } from "../redux/cartSlice";
+import { deleteProduct, reset } from "../redux/cartSlice";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import OrderDetails from "../components/OrderDetails";
@@ -22,9 +23,16 @@ const Cart = () => {
 
   const router = useRouter();
 
+  const handleDelete = (product) => {
+    dispatch(deleteProduct(product));
+  };
+
   const createOrder = async (data) => {
     try {
-      const res = await axios.post("http://localhost:3000/api/orders", data);
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/orders`,
+        data
+      );
       if (res.status === 201) {
         dispatch(reset());
         router.push(`/orders/${res.data._id}`);
@@ -93,105 +101,129 @@ const Cart = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.left}>
-        <table className={styles.table}>
-          <thead>
-            <tr className={styles.trTitle}>
-              <th>Product</th>
-              <th>Name</th>
-              <th>Extras</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cart.products.map((product) => (
-              <tr className={styles.tr} key={product._id}>
-                <td>
-                  <div className={styles.imgContainer}>
-                    <Image
-                      src={product.img}
-                      alt=""
-                      fill
-                      style={{ objectFit: "cover" }}
-                    />
-                  </div>
-                </td>
-                <td>
-                  <span className={styles.name}>{product.title}</span>
-                </td>
-                <td>
-                  <div className={styles.extras}>
-                    {product.extras.map((extra) => (
-                      <div key={extra._id}>{extra.text} </div>
-                    ))}
-                  </div>
-                </td>
-                <td>
-                  <span className={styles.price}>${product.price}</span>
-                </td>
-                <td>
-                  <span className={styles.quantity}>{product.quantity}</span>
-                </td>
-                <td>
-                  <span className={styles.total}>
-                    ${product.price * product.quantity}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className={styles.right}>
-        <div className={styles.wrapper}>
-          <h2 className={styles.title}>CART</h2>
-          <div className={styles.totalText}>
-            <b className={styles.totalTextTitle}>Subtotal:</b>${cart.total}
+    <>
+      {cart.products.length === 0 ? (
+        <div className={styles.container}>
+          Your cart is empty.{" "}
+          <Link href="/" className={styles.link}>
+            Back to Home
+          </Link>
+        </div>
+      ) : (
+        <div className={styles.container}>
+          <div className={styles.left}>
+            <table className={styles.table}>
+              <thead>
+                <tr className={styles.trTitle}>
+                  <th>Product</th>
+                  <th>Name</th>
+                  <th>Extras</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cart.products.map((product) => (
+                  <tr className={styles.tr} key={product._id}>
+                    <td>
+                      <div className={styles.imgContainer}>
+                        <Image
+                          src={product.img}
+                          alt=""
+                          fill
+                          style={{ objectFit: "cover" }}
+                        />
+                      </div>
+                    </td>
+                    <td>
+                      <span className={styles.name}>{product.title}</span>
+                    </td>
+                    <td>
+                      <div className={styles.extras}>
+                        {product.extras.map((extra) => (
+                          <div key={extra._id}>{extra.text} </div>
+                        ))}
+                      </div>
+                    </td>
+                    <td>
+                      <span className={styles.price}>${product.price}</span>
+                    </td>
+                    <td>
+                      <span className={styles.quantity}>
+                        {product.quantity}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={styles.total}>
+                        ${product.price * product.quantity}
+                      </span>
+                    </td>
+                    <td>
+                      <button
+                        className={styles.deleteButton}
+                        onClick={() => handleDelete(product)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <div className={styles.totalText}>
-            <b className={styles.totalTextTitle}>Discount:</b>$0.00
-          </div>
-          <div className={styles.totalText}>
-            <b className={styles.totalTextTitle}>Total:</b>${cart.total}
-          </div>
-          {isOpen ? (
-            <div className={styles.paymentMethods}>
-              <button
-                className={styles.payButton}
-                onClick={() => setIsPayByCash(true)}
-              >
-                CASH ON DELIVERY
-              </button>
-              <PayPalScriptProvider
-                options={{
-                  "client-id":
-                    "AaepcRyGgIu0Amxc4lOBJfvEpFpBc9NAc3macgHNBamJaSIRj6sHBq-jXKAaTeIhhf3l3mH7rDc5iyzZ",
-                  components: "buttons",
-                  currency: "AUD",
-                  "disable-funding": "credit,card,p24",
-                }}
-              >
-                <ButtonWrapper currency={currency} showSpinner={false} />
-              </PayPalScriptProvider>
+          <div className={styles.right}>
+            <div className={styles.wrapper}>
+              <h2 className={styles.title}>CART</h2>
+              <div className={styles.totalText}>
+                <b className={styles.totalTextTitle}>Subtotal:</b>${cart.total}
+              </div>
+              <div className={styles.totalText}>
+                <b className={styles.totalTextTitle}>Discount:</b>$0.00
+              </div>
+              <div className={styles.totalText}>
+                <b className={styles.totalTextTitle}>Total:</b>${cart.total}
+              </div>
+              {isOpen ? (
+                <div className={styles.paymentMethods}>
+                  <button
+                    className={styles.payButton}
+                    onClick={() => setIsPayByCash(true)}
+                  >
+                    CASH ON DELIVERY
+                  </button>
+                  <PayPalScriptProvider
+                    options={{
+                      "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+                      components: "buttons",
+                      currency: "AUD",
+                      "disable-funding": "credit,card,p24",
+                    }}
+                  >
+                    <ButtonWrapper currency={currency} showSpinner={false} />
+                  </PayPalScriptProvider>
+                </div>
+              ) : (
+                <button
+                  className={styles.button}
+                  onClick={() => setIsOpen(true)}
+                >
+                  CHECKOUT
+                </button>
+              )}
             </div>
-          ) : (
-            <button className={styles.button} onClick={() => setIsOpen(true)}>
-              CHECKOUT
-            </button>
+          </div>
+          {isPayByCash && (
+            <OrderDetails
+              total={cart.total}
+              createOrder={createOrder}
+              setIsPayByCash={setIsPayByCash}
+            />
           )}
         </div>
-      </div>
-      {isPayByCash && (
-        <OrderDetails
-          total={cart.total}
-          createOrder={createOrder}
-          setIsPayByCash={setIsPayByCash}
-        />
       )}
-    </div>
+    </>
   );
 };
 

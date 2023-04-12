@@ -14,8 +14,8 @@ const Footer = () => {
       </div>
       <div className={styles.item}>
         <div>
-          <h2 className={styles.motto}>WELL BAKED SLICE OF PIZZA.</h2>
-          <h2 className={styles.motto}>YES ! WE DID.</h2>
+          <h2 className={styles.motto}>WELL BAKED SLICE OF PIZZA !</h2>
+          <h2 className={styles.motto}>YES, WE DID !</h2>
         </div>
         <div>
           <h1 className={styles.title}>OUR RESTAURANTS</h1>

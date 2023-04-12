@@ -5,6 +5,11 @@
   gap: 50px;
 }
 
+.link {
+  margin-left: -40px;
+  text-decoration: underline;
+}
+
 .left {
   flex: 2;
 }
@@ -26,6 +31,14 @@
   font-weight: 500;
   font-size: 18px;
   color: #fcaa54;
+}
+
+.deleteButton {
+  padding: 10px;
+  border: none;
+  background-color: crimson;
+  color: white;
+  cursor: pointer;
 }
 
 .right {
@@ -140,7 +153,7 @@
     content: "Quantity: ";
     font-weight: 500;
   }
-  
+
   .total::before {
     content: "Total: ";
     font-weight: 500;
