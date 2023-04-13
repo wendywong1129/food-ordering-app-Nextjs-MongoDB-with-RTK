@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
-import axios from "axios";
 import { addProduct } from "../../redux/cartSlice";
+import dbConnect from "../../util/mongoDB";
+import ProductModel from "../../models/Product";
 import styles from "../../styles/Product.module.css";
 
 const Product = ({ pizza }) => {
@@ -143,12 +144,13 @@ const Product = ({ pizza }) => {
 
 export const getServerSideProps = async (context) => {
   const { params } = context;
-  const res = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/products/${params.id}`
-  );
+
+  await dbConnect();
+  const productItem = await ProductModel.findById(params.id);
+
   return {
     props: {
-      pizza: res.data,
+      pizza: JSON.parse(JSON.stringify(productItem)),
     },
   };
 };

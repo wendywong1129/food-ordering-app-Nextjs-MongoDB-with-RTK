@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import arrConvertToObj from "../util/arrConvertToObj";
 import styles from "../styles/Login.module.css";
-import { useEffect } from "react";
 
 const Login = () => {
   const [username, setUsername] = useState(null);
@@ -12,8 +12,12 @@ const Login = () => {
   const router = useRouter();
 
   useEffect(() => {
-    
-  }, []);
+    const cookieArr = document.cookie.split(";");
+    const cookieObj = arrConvertToObj(cookieArr);
+    if (cookieObj.token) {
+      router.push("/admin");
+    }
+  }, []); // eslint-disable-line
 
   const handleLogin = async () => {
     try {

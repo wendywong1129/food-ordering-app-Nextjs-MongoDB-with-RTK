@@ -1,12 +1,11 @@
 import { useState } from "react";
-import axios from "axios";
 import Head from "next/head";
+import dbConnect from "../util/mongoDB";
+import Product from "../models/Product";
 import Featured from "../components/Featured";
 import PizzaList from "../components/PizzaList";
 import Add from "../components/Add";
 import AddButton from "../components/AddButton";
-import dbConnect from "../util/mongoDB";
-import Product from "../models/Product";
 
 export default function Home({ pizzas, admin }) {
   const [isAdd, setIsAdd] = useState(false);

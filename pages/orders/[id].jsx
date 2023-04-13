@@ -1,5 +1,6 @@
-import axios from "axios";
 import Image from "next/image";
+import dbConnect from "../../util/mongoDB";
+import OrderModel from "../../models/Order";
 import styles from "../../styles/Order.module.css";
 
 const Order = ({ order }) => {
@@ -115,11 +116,11 @@ const Order = ({ order }) => {
 };
 
 export const getServerSideProps = async ({ params }) => {
-  const res = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/orders/${params.id}`
-  );
+  await dbConnect();
+  const orderItem = await OrderModel.findById(params.id);
+
   return {
-    props: { order: res.data },
+    props: { order: JSON.parse(JSON.stringify(orderItem)) },
   };
 };
 
