@@ -5,6 +5,8 @@ import Featured from "../components/Featured";
 import PizzaList from "../components/PizzaList";
 import Add from "../components/Add";
 import AddButton from "../components/AddButton";
+import dbConnect from "../util/mongoDB";
+import Product from "../models/Product";
 
 export default function Home({ pizzas, admin }) {
   const [isAdd, setIsAdd] = useState(false);
@@ -39,12 +41,12 @@ export const getServerSideProps = async (context) => {
     admin = true;
   }
 
-  const res = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/products`
-  );
+  await dbConnect();
+  const products = await Product.find({});
+
   return {
     props: {
-      pizzas: res.data,
+      pizzas: JSON.parse(JSON.stringify(products)),
       admin,
     },
   };

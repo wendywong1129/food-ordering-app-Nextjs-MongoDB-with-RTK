@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import styles from "../styles/Login.module.css";
+import { useEffect } from "react";
 
 const Login = () => {
   const [username, setUsername] = useState(null);
@@ -9,6 +10,10 @@ const Login = () => {
   const [error, setError] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    
+  }, []);
 
   const handleLogin = async () => {
     try {
@@ -31,7 +36,7 @@ const Login = () => {
           </span>
         )}
         <h1 className={styles.title}>Admin Dashboard</h1>
-        <div className={styles.form} onClick={handleLogin}>
+        <div className={styles.form}>
           <input
             className={styles.input}
             type="text"
@@ -44,7 +49,9 @@ const Login = () => {
             placeholder="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button className={styles.button}>Enter</button>
+          <button className={styles.button} onClick={handleLogin}>
+            Enter
+          </button>
         </div>
       </div>
     </div>

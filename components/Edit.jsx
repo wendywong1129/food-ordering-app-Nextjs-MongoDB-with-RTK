@@ -3,7 +3,6 @@ import axios from "axios";
 import styles from "../styles/Edit.module.css";
 
 const Edit = ({ productItem, setIsEdit, setPizzaList, pizzaList }) => {
-  const [file, setFile] = useState(null);
   const [title, setTitle] = useState(productItem.title);
   const [desc, setDesc] = useState(productItem.desc);
   const [priceSmall, setPriceSmall] = useState(productItem.prices[0]);

@@ -4,14 +4,15 @@ import axios from "axios";
 import Image from "next/image";
 import Edit from "../../components/Edit";
 import styles from "../../styles/Admin.module.css";
+import Product from "../../models/Product";
+import dbConnect from "../../util/mongoDB";
+import Order from "../../models/Order";
 
-const Index = ({ products, orders }) => {
+const Admin = ({ products, orders }) => {
   const [pizzaList, setPizzaList] = useState(products);
   const [orderList, setOrderList] = useState(orders);
   const [isEdit, setIsEdit] = useState(false);
   const [productItem, setProductItem] = useState(null);
-
-  console.log(pizzaList);
 
   const router = useRouter();
 
@@ -55,7 +56,8 @@ const Index = ({ products, orders }) => {
 
   const handleLogout = async () => {
     try {
-      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/logout`);
+      document.cookie =
+        "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       router.push("/login");
     } catch (err) {
       console.log(err);
@@ -177,20 +179,19 @@ export const getServerSideProps = async (context) => {
     };
   }
 
-  const productRes = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/products`
-  );
-  const orderRes = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/orders`
-  );
+  await dbConnect();
+
+  const products = await Product.find({});
+
+  const orders = await Order.find({});
 
   return {
     props: {
       cookie,
-      products: productRes.data,
-      orders: orderRes.data,
+      products: JSON.parse(JSON.stringify(products)),
+      orders: JSON.parse(JSON.stringify(orders)),
     },
   };
 };
 
-export default Index;
+export default Admin;
